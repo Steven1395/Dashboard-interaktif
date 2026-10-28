@@ -15,6 +15,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import os
 
 # Palet warna konsisten dengan notebook analisis
 HIGHLIGHT_COLOR = "#07F223"   # hijau: kesan positif / disorot
@@ -27,10 +28,12 @@ st.set_page_config(page_title="E-Commerce Analytics Dashboard", layout="wide")
 
 @st.cache_data
 def load_data() -> pd.DataFrame:
-    """Memuat main_data.csv hasil olahan notebook analisis."""
-    df = pd.read_csv("main_data.csv", parse_dates=["order_purchase_timestamp"])
+    """Memuat main_data.csv dengan path absolut agar aman di Streamlit Cloud."""
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "main_data.csv")
+    
+    df = pd.read_csv(file_path, parse_dates=["order_purchase_timestamp"])
     return df
-
 
 main_df = load_data()
 
